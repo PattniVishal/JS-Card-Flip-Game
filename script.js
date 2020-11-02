@@ -1,8 +1,6 @@
 const cards = document.querySelectorAll(".card");
 var flippedCards = document.querySelectorAll(".flip");
 
-cards.forEach((card) => card.addEventListener('click', flip));
-
 var isFlipped = false;
 var firstCard;
 var secondCard;
@@ -14,6 +12,7 @@ let points = 0;
 
 function flip(){
     this.classList.add("flip");
+    this.removeEventListener("click", flip)
     if(!isFlipped){
         isFlipped = true;
         firstCard = this;
@@ -25,7 +24,7 @@ function flip(){
         checkMatch();
     }
     flippedCards = document.querySelectorAll(".flip");
-    if(flippedCards.length == 16){
+    if(flippedCards.length === 16){
         gameOver();
     }
 }
@@ -65,6 +64,7 @@ function reset(){
 
 function gameOver(){
     clearTimeout(timeOut);
+    cards.forEach((card) => card.removeEventListener("click", flip));
     if(points > localStorage.getItem("highScore")){
         localStorage.setItem("highScore",points);
         document.getElementById("game-over-text").innerText = "New High Score !! Game Over";
@@ -77,6 +77,7 @@ function gameOver(){
 }
 
 function shuffleOnStart(){
+    cards.forEach((card) => card.addEventListener('click', flip));
     console.log("Hello on startUp");
     highScore = localStorage.getItem("highScore") == null ? 0 : localStorage.getItem("highScore");
     console.log("HighScore before Game Starts : ", localStorage.getItem("highScore"));
